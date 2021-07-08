@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.bookingMapper">
+
+<!-- 조회되는 컬럼과 setter method를 미리 매핑. -->
+<resultMap type="kr.co.sist.domain.BookingMainDomain" id="resultMain">
+	<result column="BOOKING_NO" property="bookingNo" />
+	<result column="MEMBER_NAME" property="memberName" />
+	<result column="TEL" property="tel" />
+	<result column="BIRTH" property="birth" />
+	<result column="CHK_IN" property="chkIn" />
+	<result column="CHK_OUT" property="chkOut" />
+	<result column="ROOM_NAME" property="roomName" />
+	<result column="BOOKING_STATUS" property="bookingStatus" />
+</resultMap>
+
+<!-- booking main -->
+<select id="selectMainBooking" parameterType="String" resultMap="resultMain">
+select booking_no,member_name,tel,birth,chk_in,chk_out,room_name,booking_status
+from booking b, member m, room r
+where b.member_id = m.member_id and r.room_no = b.room_no
+<trim prefix="and" >
+	<if test='!str.equals("")'>
+		<choose>
+			<when test='str.contains("_")'>
+				booking_no= '${ booking_no }'
+			</when>
+			<when test='str.contains("-")'>
+				chk_in= '${ chk_in }'
+			</when>
+ 			<otherwise>
+				booking_status= '${ booking_status }'
+			</otherwise>
+		</choose>
+	</if>
+</trim>	
+</select>
+
+<!-- 조회되는 컬럼과 setter method를 미리 매핑. -->
+<resultMap type="kr.co.sist.domain.BookingOneDomain" id="resultOne">
+	<result column="BOOKING_NO" property="bookingNo" />
+	<result column="MEMBER_NAME" property="memberName" />
+	<result column="TEL" property="tel" />
+	<result column="BIRTH" property="birth" />
+	<result column="CHK_IN" property="chkIn" />
+	<result column="CHK_OUT" property="chkOut" />
+	<result column="ROOM_NAME" property="roomName" />
+	<result column="BOOKING_STATUS" property="bookingStatus" />
+	<result column="BOOKING_PEOPLE" property="bookingPeople" />
+	<result column="BOOKING_DATE" property="bookingDate" />
+</resultMap>
+
+<!-- booking one -->
+<select id="selectOneBooking"  parameterType="String"  resultMap="resultOne">
+select booking_no,member_name,tel,birth,chk_in,chk_out,room_name,booking_status,booking_people,booking_date
+from booking b, member m, room r
+where b.member_id = m.member_id and r.room_no = b.room_no
+and booking_no = '${ booking_no }'
+</select>
+
+<!-- booking update -->
+<update id="updateBooking" parameterType="kr.co.sist.vo.BookingModifyVO">
+update	booking
+set			chk_in=#{ chkIn }, chk_out=#{ chkOut }, booking_status=#{ bookingStatus }
+where	booking_no=#{ bookingNo }
+</update>
+
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.calendarMapper">
+
+<!-- <resultMap type="kr.co.sist.domain.CalendarMonthDomain" id="resultMonth">
+	<result column="BOOKING_STATUS" property="bookingStatus" />
+	<result column="CHK_IN" property="chkIn" />
+</resultMap> -->
+
+<!-- calendar month -->
+<select id="selectCalendarMonth" parameterType="kr.co.sist.domain.CalendarMonthDomain" resultType="String">
+select		count(booking_status)
+from		booking
+where	booking_status=#{bookingStatus}
+and		chk_in like #{chkIn}||'%'
+</select>
+
+<!-- calendar about -->
+<select id="selectCalendarAbout" parameterType="kr.co.sist.domain.CalendarAboutDomain" resultType="String">
+select booking_status
+from booking
+where chk_in=#{chkIn}
+and room_no=#{roomNo}
+</select>
+</mapper>

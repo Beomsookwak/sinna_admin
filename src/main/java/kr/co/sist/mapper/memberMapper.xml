@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.memberMapper">
+
+<!-- 조회되는 컬럼과 setter method를 미리 매핑. -->
+<resultMap type="kr.co.sist.domain.MemberMainDomain" id="resultMain">
+	<result column="MEMBER_ID" property="memberId" />
+	<result column="EMAIL" property="email" />
+	<result column="MEMBER_NAME" property="memberName" />
+	<result column="BIRTH" property="birth" />
+	<result column="TEL" property="tel" />
+</resultMap>
+
+<!-- member main -->
+<select id="selectMainMember"  parameterType="String"  resultMap="resultMain">
+select		member_id, email, member_name, birth, tel
+from		member
+<trim prefix="where" >
+	<if test='!str.equals("")'>
+		<choose>
+			<when test='str.contains("-")'>
+					tel= '${ tel }'
+			</when>
+ 			<otherwise>
+					member_id= '${ member_id }'
+			</otherwise>
+		</choose>
+	</if>
+</trim>	
+</select>
+
+<!-- 조회되는 컬럼과 setter method를 미리 매핑. -->
+<resultMap type="kr.co.sist.domain.MemberOneDomain" id="resultOne">
+	<result column="MEMBER_ID" property="memberId" />
+	<result column="MEMBER_NAME" property="memberName" />
+	<result column="EMAIL" property="email" />
+	<result column="BIRTH" property="birth" />
+	<result column="TEL" property="tel" />
+	<result column="SIGN_DATE" property="signDate" />
+</resultMap>
+
+<!-- member one -->
+<select id="selectOneMember"  parameterType="String"  resultMap="resultOne">
+select		member_id, member_name, email, birth, tel, sign_date
+from		member
+where	member_id='${ member_id }'
+</select>
+
+<!-- member delete -->
+<delete id="deleteMember" parameterType="String">
+delete	from member
+where	member_id=#{ memberId }
+</delete>
+
+
+</mapper>

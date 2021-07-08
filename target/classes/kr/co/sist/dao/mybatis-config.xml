@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!-- 환경설정에 관련된 값을 외부에 정의하고 연결하여  사용할 수 있다. -->
+<properties resource="properties/database.properties" />
+<!-- <settings>
+<setting name="loglmpl" value="LOG4J"/>
+</settings> -->
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <!-- mapper를 추가해주세요 ! -->
+  <mappers>
+<mapper resource="kr/co/sist/mapper/homeMapper.xml"/>
+<mapper resource="kr/co/sist/mapper/roomMapper.xml"/>
+<mapper resource="kr/co/sist/mapper/memberMapper.xml"/>
+<mapper resource="kr/co/sist/mapper/bookingMapper.xml"/>
+<mapper resource="kr/co/sist/mapper/calendarMapper.xml"/>
+<mapper resource="kr/co/sist/mapper/noticeMapper.xml"/>
+<mapper resource="kr/co/sist/mapper/loginMapper.xml"/>
+  </mappers>
+</configuration>

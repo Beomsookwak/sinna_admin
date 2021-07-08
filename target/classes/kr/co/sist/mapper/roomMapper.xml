@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.roomMapper">
+
+<!-- 조회되는 컬럼과 setter method를 미리 매핑. -->
+<resultMap type="kr.co.sist.domain.RoomMainDomain" id="resultMain">
+	<result column="ROOM_NO" property="roomNo" />
+	<result column="ROOM_NAME" property="roomName" />
+	<result column="ROOM_AREA" property="roomArea" />
+	<result column="ROOM_PEOPLE" property="roomPeople" />
+	<result column="ROOM_PRICE" property="roomPrice" />
+</resultMap>
+
+<!-- room main -->
+<select id="selectMainRoom" parameterType="String" resultMap="resultMain">
+select		room_no, room_name, room_area, room_people, room_price
+from		room
+<trim prefix="where" >
+	<if test='!str.equals("")'>
+		<choose>
+			<when test='str.contains("_")'>
+				room_no= '${ room_no }'
+			</when>
+ 			<otherwise>
+				room_name= '${ room_name }'
+			</otherwise>
+		</choose>
+	</if>
+</trim>		
+	
+</select>
+
+<!-- 조회되는 컬럼과 setter method를 미리 매핑. -->
+<resultMap type="kr.co.sist.domain.RoomOneDomain" id="resultOne">
+	<result column="ROOM_NO" property="roomNo" />
+	<result column="ROOM_NAME" property="roomName" />
+	<result column="ROOM_AREA" property="roomArea" />
+	<result column="ROOM_PEOPLE" property="roomPeople" />
+	<result column="ROOM_PRICE" property="roomPrice" />
+	<result column="ROOM_DATE" property="roomDate" />
+	<result column="ROOM_IMG" property="roomImg" />
+</resultMap>
+
+<!-- room one -->
+<select id="selectOneRoom"  parameterType="String" resultMap="resultOne">
+	select room_no,room_name,room_area,room_people,room_price,room_date,room_img
+	from room
+	where room_no= '${ room_no }'
+</select>
+
+<!-- room update -->
+<update id="updateRoom" parameterType="kr.co.sist.vo.RoomModifyVO">
+update	room
+set			room_name=#{roomName}, room_area=#{roomArea}, room_people=#{roomPeople}, room_price=#{roomPrice}, room_img=#{roomImg}
+where	room_no=#{ roomNo }
+</update>
+
+<!-- room insert -->
+<insert id="insertRoom" parameterType="kr.co.sist.vo.RoomAddVO">
+insert into room
+values( 'R_'||lpad(seq_room.nextval,8,0), #{roomName}, #{roomArea},
+		#{roomPeople}, #{roomPrice}, #{roomImg}, sysdate, 'kwak' )
+</insert>
+</mapper>

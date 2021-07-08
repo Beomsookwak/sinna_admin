@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.sist.homeMapper">
+
+<!-- 당일 받은 예약 -->
+<select id="todayBooking" resultType="String">
+	select		count(booking_no)
+	from		booking
+	where	to_char(booking_date,'yyyy-mm-dd') like to_char(sysdate,'yyyy-mm-dd')
+</select>
+
+<!-- 당일 투숙 매출 -->
+<select id="todaySales" resultType="Integer">
+	select		nvl(sum(room_price),0)
+	from		booking,room
+	where	booking.room_no = room.room_no
+	and		chk_in like to_char(sysdate,'yyyy-mm-dd')
+	and		booking_status='Y'
+</select>
+
+<!-- 당일 투숙 방문객 -->
+<select id="todayGuest" resultType="String">
+	select		count(booking_no)
+	from		booking
+	where	to_char(chk_in) like to_char(sysdate,'yyyy-mm-dd')
+	and		booking_status='Y'
+</select>
+
+<!-- 내일 투숙 방문객 -->
+<select id="tomorrowGuest" resultType="String">
+	select		count(booking_no)
+	from		booking
+	where	to_char(chk_in) like to_char(sysdate+1,'yyyy-mm-dd')
+	and		booking_status='Y'
+</select>
+
+<!-- 이번달 투숙 방문객 -->
+<select id="thisMonthGuest" resultType="String">
+	select		count(booking_no)
+	from		booking
+	where	to_char( substr(chk_in,0,7) ) like to_char(sysdate,'yyyy-mm')
+	and		booking_status='Y'
+</select>
+
+<!-- 이번달 투숙 매출 -->
+<select id="thisMonthSales" resultType="Integer">
+	select		nvl(sum(room_price),0)
+	from		booking,room
+	where	booking.room_no = room.room_no
+	and		to_char( substr(chk_in,0,7) ) like to_char(sysdate,'yyyy-mm')
+	and		booking_status='Y'
+</select>
+
+<!-- 지난달 투숙 방문객 -->
+<select id="lastMonthGuest" resultType="String">
+	select		count(booking_no)
+	from		booking
+	where	to_char( substr(chk_in,0,7) ) like to_char(add_months(sysdate,-1),'yyyy-mm')
+	and		booking_status='Y'
+</select>
+
+<!-- 지난달 투숙 매출 -->
+<select id="lastMonthSales" resultType="Integer">
+	select		nvl(sum(room_price),0)
+	from		booking,room
+	where	booking.room_no = room.room_no
+	and		to_char( substr(chk_in,0,7) ) like to_char(add_months(sysdate,-1),'yyyy-mm')
+	and		booking_status='Y'
+</select>
+
+  	
+</mapper>
